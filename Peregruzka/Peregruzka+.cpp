@@ -6,6 +6,12 @@ class  Duration {
 public:
 	int hour;
 	int min;
+	void change(int h, int m){
+		h=hour;
+		m=min;
+		hour = hour + min/60;
+		min = min % 60;
+	}
 	};
 
 ostream& operator<<(ostream& stream, Duration& dur)
@@ -20,23 +26,19 @@ Duration operator+(Duration& dur1, Duration& dur2){
 	int a=dur1.hour+dur2.hour;
 	int b=dur1.min+dur2.min;
 
-	dur1.hour=a;
-	dur1.min=b;
-	return dur1;
+	Duration dur3;
+	dur3.hour=a;
+	dur3.min=b;
+	dur3.change(a,b);
+	return dur3;
 }
 
 int main() {
-	int a,b;
 	Duration dur1;
-	cin >> a >> b;
+	cin >> dur1.hour >> dur1.min;
 	Duration dur2;
-	cin >> a >> b;
+	cin >> dur2.hour >> dur2.min;
 	Duration dur3;
-	dur3=dur1+dur2;
-	if (dur3.min > 60) {
-		dur3.hour = dur3.hour + (dur3.min/60);
-		dur3.min %= 60;
-	}
+	dur3=dur1 + dur2;
 	cout << dur3;
 }
-
