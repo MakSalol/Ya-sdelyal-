@@ -7,8 +7,8 @@ struct changes{
 string name;
 string surname;
 int date;
-int changingFn;// переменные, которые отвечают за сам факт изменения имени и фамилии.
-int changingSn; // 1 = изменение произошло, 0 = изменений не было.
+int changingFn;
+int changingSn;
 changes (string a, string b, int c, int d, int f){
 	name = a;
 	surname = b;
@@ -61,20 +61,22 @@ public:
 	   }
 	   else cout << "No Person" << endl;
 	}
-	void GetFullNameWithHitory(int year) {
+	void GetFullNameWithHistory(int year) {
+		if (year >= birth){
 		for (unsigned int i = 0; i < change.size(); i++){
 			cout << change[i].name <<" "<< change[i].surname <<" " << change[i].date << endl;
-		}
+			}
+		} else cout <<"No Person" << endl;
 	}
 	void GetFullName(int year){
 		int l = 0;
 		int k = 0;
 		int z = 0;
-		if (birth < year){
+		if (birth <= year){
 			for (unsigned int i = 0; i < change.size(); i++){
 				if ((change[i].date <= year)){
 					l++;
-					 if (change[i].changingFn == 1){  //считаю все изменения.
+					 if (change[i].changingFn == 1){
 						 k++;
 					 }
 					 if (change[i].changingSn == 1){
@@ -92,29 +94,26 @@ public:
 				cout << change[l-1].name <<" "<< "with unknown last name" << endl;
 			}
 			if ((k == 0) && (z == 0)){
-				cout << "Incognito" << endl;
+				if (year < change[1].date){
+					cout << change[0].name <<" "<< change[0].surname << endl;
+				} else cout <<"Incognito";
 			}
 		} else cout << "No Person";
 	}
 };
 
 int main() {
-  Person abc("Victoriya", "Olololshina", 1950);
+	Person person("Polina", "Sergeeva", 1960);
+	  for (int year : {1959, 1960}) {
+	     person.GetFullNameWithHistory(year);
+	  }
 
-  abc.ChangeLastName(1951, "Olololshina");
-  abc.ChangeLastName(1952, "Olololshina");
-  abc.ChangeFirstName(1953,"Yana");
+	  person.ChangeFirstName(1965, "Appolinaria");
+	  person.ChangeLastName(1967, "Ivanova");
+	  for (int year : {1965, 1967}) {
+	    person.GetFullNameWithHistory(year);
+	  }
 
-
-  abc.ChangeFirstName(1965, "Polina");
-  abc.ChangeLastName(1967, "Sergeeva");
-  abc.ChangeFirstName(1969, "Galina");
-  abc.ChangeLastName(1970, "Ivanova");
-  abc.ChangeLastName(1971, "Ivanova");
-  abc.ChangeLastName(1972, "Krasnova");
-  abc.GetFullNameWithHitory(1973);
-  cout << endl;
-  abc.GetFullName(1952);
 
   return 0;
 }
