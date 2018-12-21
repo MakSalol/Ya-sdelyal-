@@ -8,7 +8,7 @@ using namespace std;
 
 string GetString(vector<string>& v){
 	stringstream mm;
-	for (unsigned int i =0; i < v.size(); i++){
+	for ( int i =v.size() - 1; i >= 0; i--){
 		mm << v[i] <<" ";
 	}
 	return mm.str();
@@ -72,16 +72,28 @@ public:
   string GetFullNameWithHistory(int year) {
 	  string FirstName;
 	  string LastName;
+	  string preFirst;
+	  string preLast;
 	  vector<string> changesFirst;
 	  vector<string> changesSecond;
 	  bool ChangeFirstName = false;
 	  bool ChangeLastName = false;
+	  bool FirstInput = true;
+	  bool LastInput = true;
 	  stringstream ss;
 	  for (const auto& name : firstNames){
 		  if(name.first <= year){
 			  FirstName = name.second;
-			  changesFirst.push_back(FirstName);
+			  if (FirstInput){
+				  preFirst = FirstName;
+				  changesFirst.push_back(preFirst);
+				  FirstInput = false;
+			  }
 			  ChangeFirstName = true;
+			  if (FirstName != preFirst){
+				  changesFirst.push_back(FirstName);
+			  }
+			  preFirst = FirstName;
 		  }
 	  }
 
@@ -89,38 +101,27 @@ public:
 	  for(const auto& surname : lastNames){
 		  if(surname.first <= year){
 			  LastName = surname.second;
-			  changesSecond.push_back(LastName);
+			  if(LastInput){
+				  preLast = LastName;
+				  changesSecond.push_back(preLast);
+				  LastInput = false;
+			  }
 			  ChangeLastName = true;
+			  if (LastName != preLast){
+				  changesSecond.push_back(LastName);
+			  }
+			  preLast = LastName;
 		  }
 	  }
 
-	  for (unsigned int i = 0; i < changesFirst.size(); i++){
-		  if( changesFirst.size() == 1){
-			  break;
-		  }
-		  if (changesFirst.size() > 1){
-		  if (changesFirst[i] == changesFirst[i+1]){
-			  changesFirst.erase(changesFirst.begin() + i);
-		  }
+	  if(changesFirst.size() > 0){
+		  changesFirst.pop_back();
 	  }
-	  }
-
-	  for (unsigned int i = 0; i < changesSecond.size(); i++){
-		  if (changesSecond.size() == 1){
-			  break;
-		  }
-		  if (changesSecond.size() > 1){
-	  		  if (changesSecond[i] == changesSecond[i+1]){
-	  			changesSecond.erase(changesSecond.begin() + i);
-	  		  }
+	  if(changesSecond.size() > 0){
+	  		  changesSecond.pop_back();
 	  	  }
-	  }
-	  if (changesFirst.size() > 0) {
-	  changesFirst.erase(changesFirst.end());
-	  }
-	  if (changesSecond.size() > 0) {
-	  changesSecond.erase(changesSecond.end());
-	  }
+
+
 	  if (ChangeFirstName == false && ChangeLastName == false){
 	 	  	  		  ss << "Incognito" << endl;
 	 	  	  		  return ss.str();
