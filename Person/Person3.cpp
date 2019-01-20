@@ -4,6 +4,7 @@
 #include <map>
 #include <sstream>
 #include <cstring>
+#include <algorithm>
 using namespace std;
 
 string GetString(vector<string>& v){
@@ -101,46 +102,41 @@ Person(string a, string b, int c){
 	  string preLast;
 	  bool ChangeFirstName = false;
 	  bool ChangeLastName = false;
-	  bool FirstInput = true;
-	  bool LastInput = true;
 	  stringstream ss;
-	  for (const auto& name : firstNames){
-		  if(name.first <= year){
-			  FirstName = name.second;
-			  if (FirstInput){
-				  preFirst = changesFirst[0];
-				  FirstInput = false;
-			  }
+
+	  for (auto i : firstNames){
+		  if (i.first <= year){
 			  ChangeFirstName = true;
-			  if (FirstName != preFirst){
-				  changesFirst.push_back(FirstName);
-			  }
-			  preFirst = FirstName;
+			  changesFirst.push_back(i.second);
 		  }
 	  }
 
-
-	  for(const auto& surname : lastNames){
-		  if(surname.first <= year){
-			  LastName = surname.second;
-			  if(LastInput){
-				  preLast = changesSecond[0];
-				  LastInput = false;
-			  }
+	  for (auto i : lastNames){
+		  if(i.first <= year){
 			  ChangeLastName = true;
-			  if (LastName != preLast){
-				  changesSecond.push_back(LastName);
-			  }
-			  preLast = LastName;
+			  changesSecond.push_back(i.second);
 		  }
 	  }
 
-	 //if(changesFirst.size() >= 1){
-		//  changesFirst.pop_back();
-	 // }
-	 // if(changesSecond.size() >= 1){
-	  //		  changesSecond.pop_back();
- 	 // }
+
+	  auto v = unique(changesFirst.begin(), changesFirst.end());
+	  changesFirst.erase(v, changesFirst.end());
+
+	  FirstName = *(changesFirst.end() - 1);
+
+
+	  auto m = unique(changesSecond.begin(), changesSecond.end());
+	  changesSecond.erase(m, changesSecond.end());
+	  LastName = *(changesSecond.end() -1 );
+
+	  if (FirstName == changesFirst.back()){
+		  changesFirst.pop_back();
+	  }
+
+
+	  if (LastName == changesSecond.back()){
+		  changesSecond.pop_back();
+	  }
 
 
 	  if (ChangeFirstName == false && ChangeLastName == false){
@@ -212,19 +208,14 @@ Person(string a, string b, int c){
 int main(){
 	Person person("Polina", "Sergeeva", 1960);
 	  for (int year : {1959, 1960}) {
-	    cout << person.GetFullNameWithHistory(year) << endl;
+	    cout << year << endl <<  person.GetFullNameWithHistory(year) << endl;
 	  }
 
 	  person.ChangeFirstName(1965, "Appolinaria");
 	  person.ChangeLastName(1967, "Ivanova");
 	  for (int year : {1965, 1967}) {
-	    cout << person.GetFullNameWithHistory(year) << endl;
+	    cout << year << endl << person.GetFullNameWithHistory(year) << endl;
 	  }
 
 	  return 0;
 	}
-
-
-
-
-
