@@ -52,12 +52,12 @@ public:
 
 istream& operator >>(istream& stream, Matrix& Matrica){
 	int Rows, Cols, Element;
-	cout << "Vvedite Matricu" << endl;;
-	cin >> Rows >> Cols;
+	cout << "Vvedite Matricu" << endl;
+	stream >> Rows >> Cols;
 	Matrica.Reset (Rows, Cols);
 	for (int i = 0; i < Rows; i++){
 		for (int m = 0; m < Cols; m++){
-			cin >> Element;
+			stream >> Element;
 			Matrica.At(i,m) = Element;
 		}
 	}
@@ -79,14 +79,12 @@ bool operator ==(Matrix& Matrica1, Matrix& Matrica2){
 	if ((Matrica1.GetNumRows() == Matrica2.GetNumRows()) && (Matrica1.GetNumColums() == Matrica2.GetNumColums())){
 		for (int i = 0; i < Matrica1.GetNumRows(); i++){
 			for (int m = 0; m < Matrica1.GetNumColums(); m++){
-				if (Matrica1.At(i,m) == Matrica2.At(i,m)){
-					return true;
-				}
-				else{
+				if (Matrica1.At(i,m) != Matrica2.At(i,m)){
 					return false;
 				}
 			}
 		}
+		return true;
 	}
 	else{
 		return false;
@@ -100,9 +98,7 @@ Matrix operator +(Matrix& Matrica1, Matrix& Matrica2){
 	Matrix Matrica(Matrica1.GetNumRows(), Matrica1.GetNumColums());
 	for (int i = 0; i < Matrica.GetNumRows(); i++){
 		for (int m = 0; m < Matrica.GetNumColums(); m++){
-			int a = Matrica1.At(i,m) + Matrica2.At(i,m);
-			int& b = Matrica.At(i,m);
-			b = a;
+			Matrica.At(i,m) = Matrica1.At(i,m) + Matrica2.At(i,m);
 		}
 	}
 	return Matrica;
