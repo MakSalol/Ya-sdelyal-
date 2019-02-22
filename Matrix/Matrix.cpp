@@ -1,11 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <exception>
+#include <sstream>
 using namespace std;
 
 class Matrix{
 private:
 	vector<vector<int>> Matrica;
+	stringstream ss;
 public:
 	Matrix(){
 
@@ -13,7 +16,8 @@ public:
 
 	Matrix(int NumRows, int NumCols){
 		if ((NumRows < 0) || (NumCols < 0)){
-			cout << "Error";
+			ss << "Error: "  << " error: out_of_range";
+			throw out_of_range(ss.str());
 		}
 		vector<int> Cols(NumCols);
 		for (int i = 0; i < NumRows; i++){
@@ -104,11 +108,33 @@ Matrix operator +(Matrix& Matrica1, Matrix& Matrica2){
 	return Matrica;
 }
 
+Matrix operator *(Matrix& Matrica1, Matrix& Matrica2){
+	stringstream ss;
+	if(Matrica1.GetNumColums() != Matrica2.GetNumRows()){
+	//ss << "Error" << endl <<"error: invalid_argument";
+	//throw invalid_argument(ss.str());
+		//cout << "Error" << endl;
+	}
+	else{
+		Matrix Matrica3(Matrica1.GetNumRows(), Matrica2.GetNumColums());
+		for (int j = 0; j < Matrica1.GetNumRows(); j++){
+			for (int z = 0; z < Matrica2.GetNumColums(); z++){
+				Matrica3.At(j,z) = 0;
+				for(int i = 0; i < Matrica2.GetNumRows(); i++){
+					Matrica3.At(j,z) += Matrica1.At(j,i) * Matrica2.At(i,z);
+				}
+			}
+		}
+		return Matrica3;
+	}
+}
+
 
 int main(){
 	Matrix Matrica1;
 	Matrix Matrica2;
 	cin >> Matrica1 >> Matrica2;
-	Matrix Matrica3 = Matrica1 + Matrica2;
+	//cout << Matrica1 << endl << Matrica2;
+	Matrix Matrica3 = Matrica1 * Matrica2;
 	cout << Matrica3;
 }
