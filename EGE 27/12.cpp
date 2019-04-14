@@ -8,18 +8,18 @@ int main(){
 	int k = 1001;
 	int l = 1001;
 	int j = 1001;
-	int z;
 	for (int i = 0; i < N; i++){
 		cin >> a[i];
 		if (a[i] < k){
 			k = a[i];
-			z = i;
+			a[i] = a[0];
+			a[0] = k;
 		}
 	}
 	int control;
 	cin >> control;
 	if (k % 2 == 0){
-		for (int i = z + 1; i < N; i++){
+		for (int i = 1; i < N; i++){
 			if ((a[i] < l) && (a[i] % 2 == 0) && (a[i] >= k)){
 				l = a[i];
 			}
@@ -30,7 +30,7 @@ int main(){
 		} else { cout << "Fail"; }
 		}
 	else {
-		for (int i = z + 1; i < N; i++){
+		for (int i = 1; i < N; i++){
 			if ((a[i] < j) && (a[i] % 2 != 0) && (a[i] >= k)){
 				j = a[i];
 			}
